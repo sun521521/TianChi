@@ -1,0 +1,27 @@
+vec = DictVectorizer()
+arr = vec.fit_transform(train_features).toarray()
+arr_to_test = vec.fit_transform(test_features).toarray()
+arr_to_online_test = vec.fit_transform(online_test_features).toarray() 
+
+
+lbl = preprocessing.LabelEncoder()  
+lbl.fit(list(train_labels))
+a=lbl.transform(list(train_labels))
+xgbtrain = xgb.DMatrix(arr, a)
+
+
+num_class = a.max()+1
+params = {
+'objective': 'multi:softmax',
+'eta': 1,
+'max_depth': 9,
+'eval_metric': 'merror',
+'seed': 0,
+'missing': -999,
+'num_class':num_class,
+'silent' : 1
+}
+
+early_stopping_rounds=15
+
+model = xgb.train(params, xgbtrain, early_stopping_rounds)
