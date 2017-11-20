@@ -30,46 +30,30 @@
 3、字段表
 ------- 
 Table 1、店铺和商场信息表
-Field	Type	Description	Note
-shop_id	String	店铺ID	已脱敏
-category_id	String	店铺类型ID	共40种左右类型，已脱敏
-longitude	Double	店铺位置-经度	已脱敏，但相对距离依然可信
-latitude	Double	店铺位置-纬度	已脱敏，但相对距离依然可信
-price	Bigint	人均消费指数	从人均消费额脱敏而来，越高表示本店的人均消费额越高
-mall_id	String	店铺所在商场ID	已脱敏
+######
+![](https://github.com/sun521521/TianChi/TianChi/Data/table1.png)
+
 Table 2、用户在店铺内交易表
-Field	Type	Description	Note
-user_id	String	用户ID	已脱敏
-shop_id	String	用户所在店铺ID	已脱敏。这里是用户当前所在的店铺，可以做训练的正样本。（此商场的所有其他店铺可以作为训练的负样本）
-time_stamp	String	行为时间戳	粒度为10分钟级别。例如：2017-08-06 21:20
-longitude	Double	行为发生时位置-经度	已脱敏，但相对距离依然可信
-latitude	Double	行为发生时位置-纬度	已脱敏，但相对距离依然可信
-wifi_infos	String	行为发生时Wifi环境，包括bssid（wifi唯一识别码），signal（强度），flag（是否连接）	例子：
-b_6396480|-67|false;b_41124514|-86|false;b_28723327|-90|false;
-解释：以分号隔开的WIFI列表。对每个WIFI数据包含三项：b_6396480是脱敏后的bssid，-67是signal强度，数值越大表示信号越强，false表示当前用户没有连接此WIFI（true表示连接）。
+######
+![](https://github.com/sun521521/TianChi/TianChi/Data/table2.png)
+
 Table 3、评测集
-Field	Type	Description	Note
-row_id	String	测试数据ID	 
-user_id	String	用户ID	已脱敏，并和训练数据保持一致
-mall_id	String	商场ID	已脱敏，并和训练数据保持一致
-time_stamp	String	行为时间戳	粒度为10分钟级别。例如：2017-08-06 21:20
-longitude	Double	行为发生时位置-经度	已脱敏，但相对距离依然可信
-latitude	Double	行为发生时位置-纬度	已脱敏，但相对距离依然可信
-wifi_infos	String	行为发生时Wifi环境，包括bssid（wifi唯一识别码），signal（强度），flag（是否连接）	格式和训练数据中wifi_infos格式相同
+######
+![](https://github.com/sun521521/TianChi/TianChi/Data/table3.png)
 
 我的分析
 ------- 
 这个问题的挑战有以下三点：
-	商场中的环境错综复杂，虽然告诉了用户在移动支付时的GPS（经纬度）信息，但有的店铺离的很近，甚至有的店铺位于垂直上下层，同时，手机的GPS也存在误差。这些原因导致了仅仅利用经纬度信息很难精确定位
-	对于离得近的几个商铺，WIFI与商铺的对应关系不明朗，例如：用户在附近几家商铺支付时，WIFI列表信息（WIFI名称-强度）具有很强的相似性，不易区分
-	猜想有商铺开分店的情况，即商铺的名字一样，但是周围的WIFI信息完全不同
-	具有WIFI噪声的干扰，例如：移动热点，公共WIFI，或者一个商铺有两个相同名字但不同强度的WIFI
+*商场中的环境错综复杂，虽然告诉了用户在移动支付时的GPS（经纬度）信息，但有的店铺离的很近，甚至有的店铺位于垂直上下层，同时，手机的GPS也存在误差。这些原因导致了仅仅利用经纬度信息很难精确定位
+*对于离得近的几个商铺，WIFI与商铺的对应关系不明朗，例如：用户在附近几家商铺支付时，WIFI列表信息（WIFI名称-强度）具有很强的相似性，不易区分
+*猜想有商铺开分店的情况，即商铺的名字一样，但是周围的WIFI信息完全不同
+*具有WIFI噪声的干扰，例如：移动热点，公共WIFI，或者一个商铺有两个相同名字但不同强度的WIFI
 
 我的主要思路
 ------- 
-	WIFI是个很强的信息，首先求出可以描述每个商铺的wifi集合，即：该商铺所能捕获的wifi，这些wifi可能就是该店铺的，也可能是隔壁的，它们在一定程度上可以代表该商铺。并求出每个WIFI出现的平均强度
-	对于每一个用户样本，计算对应每个商铺的wifi名称相似性和强度相似性，以及经纬度相似度，支付时间趋势等作为分类特征，形成一个稀疏的特征直方图
-	每个商场复杂情况不一样，参数也会不一样，并且考虑到内存占用问题，我们采用分商场进行训练学习
+*WIFI是个很强的信息，首先求出可以描述每个商铺的wifi集合，即：该商铺所能捕获的wifi，这些wifi可能就是该店铺的，也可能是隔壁的，它们在一定程度上可以代表该商铺。并求出每个WIFI出现的平均强度
+*对于每一个用户样本，计算对应每个商铺的wifi名称相似性和强度相似性，以及经纬度相似度，支付时间趋势等作为分类特征，形成一个稀疏的特征直方图
+*每个商场复杂情况不一样，参数也会不一样，并且考虑到内存占用问题，我们采用分商场进行训练学习
 
 主要步骤
 ------- 
@@ -87,18 +71,18 @@ wifi_infos	String	行为发生时Wifi环境，包括bssid（wifi唯一识别码�
 
 构建特征
 ####
-	强度特征直方图。
+*强度特征直方图。
 #####
 动机有两点：对于用户的wifi列表，信号越强，该用户越可能在该信号所在的商铺
 <a href="https://www.codecogs.com/eqnedit.php?latex=1-[1-exp(-\A\lambda_{1}|user\_inten_{i}-max\_inten|)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1-[1-exp(-\A\lambda_{1}|user\_inten_{i}-max\_inten|)]" title="1-[1-exp(-\A\lambda_{1}|user\_inten_{i}-max\_inten|)]" /></a>
 这里，user_inten为用户所能搜到的wifi名字及强度，max_inten为用户搜到的最强的信号。我们把这个差距通过指数分布函数进行映射到概率空间，差距越小，被认为是该信号所在商铺的概率越大；对于商铺，该商铺所能捕获的wifi以及强度与用户的wifi列表越接近，该用户越可能在该商铺。
 <a href="https://www.codecogs.com/eqnedit.php?latex=exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" title="exp(-\lambda _{2}|shop\_inten_{j}-user\_inten_{j}|) \; j\in \left \{ w_{j}|w_{j}\in shop\_wifis\; and\; w_{j}\in user\_wifis \right \}" /></a>
 可以理解为，先求出商铺的wifi集合与该用户wifi列表的交集，然后把wifi的强度差异同样通过指数分布映射，越接近，相似性越大。
-	名称特征直方图。
+*名称特征直方图。
 #####
 想法是：该用户wifi名称列表与商铺的wifi重合度越大，越有可能属于该商铺。使用的公式是：
 相似度=wifi交集数量/商铺wifi数量
-	经纬度和时间特征
+*经纬度和时间特征
 #####
 计算该用户移动支付时的经纬度与所有商铺的距离，然后把每个距离通过公式映射为相似度，构造一个距离相似度直方图。虽然这个特征不是很稳定，但经过测试，对于部分样本任然可信，因此我们没有抛弃它。同时，经过统计我们发现，每家商铺的用户支付时间是很有规律的，比如：餐馆一般集中在吃饭时间，电影院集中在下午或者晚上，24小时便利店凌晨也有消费等等。因此，我们把24个小时采用粒度为2小时进行划分，利用12个bin对每个用户构建one-hot特征
 
@@ -109,11 +93,11 @@ wifi_infos	String	行为发生时Wifi环境，包括bssid（wifi唯一识别码�
 
 训练与分类
 ####
-	因为给的数据是有时间趋势的，我们按时间点进行划分，采用三折交叉验证。当找到最优参数后，再对所有样本进行训练
-	尝试了决策树，发现很容易过拟合，准确率不高
-	我们采用了LR和SVM分类器：主要考虑到它具有很好的泛化能力；并且我们构建的特征维数多于大多数商铺的样本数，特征还是稀疏的，这样的情况比较适合SVM。
+*因为给的数据是有时间趋势的，我们按时间点进行划分，采用三折交叉验证。当找到最优参数后，再对所有样本进行训练
+*尝试了决策树，发现很容易过拟合，准确率不高
+*我们采用了LR和SVM分类器：主要考虑到它具有很好的泛化能力；并且我们构建的特征维数多于大多数商铺的样本数，特征还是稀疏的，这样的情况比较适合SVM。
 还采用了基于boosting的随机森林，三个臭皮匠顶个诸葛亮，集成学习是很好的思路，用弱分类器组合来进行分类。随机森林速度快，一般不容易过拟合，而且允许缺失值得存在
-	还尝试使用xgboost，对于我们的类别，动则上百，需要构建上百个叶子结点，使用xgboost就太慢了；SVM之所以快，是因为他不是在自身算法上实现的多分类，而是利用了OVO或者OVR的策略，本质还是二分类。
+*还尝试使用xgboost，对于我们的类别，动则上百，需要构建上百个叶子结点，使用xgboost就太慢了；SVM之所以快，是因为他不是在自身算法上实现的多分类，而是利用了OVO或者OVR的策略，本质还是二分类。
 
 
 还有几点
