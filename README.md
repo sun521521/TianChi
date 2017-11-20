@@ -43,7 +43,7 @@ Table 3、评测集
 
 我的分析
 ------- 
-这个问题的挑战有以下三点：
+这个问题的挑战有以下四点：
 * 商场中的环境错综复杂，虽然告诉了用户在移动支付时的GPS（经纬度）信息，但有的店铺离的很近，甚至有的店铺位于垂直上下层，同时，手机的GPS也存在误差。这些原因导致了仅仅利用经纬度信息很难精确定位
 * 对于离得近的几个商铺，WIFI与商铺的对应关系不明朗，例如：用户在附近几家商铺支付时，WIFI列表信息（WIFI名称-强度）具有很强的相似性，不易区分
 * 猜想有商铺开分店的情况，即商铺的名字一样，但是周围的WIFI信息完全不同
@@ -79,8 +79,7 @@ Table 3、评测集
 这里，user_inten为用户所能搜到的wifi名字及强度，max_inten为用户搜到的最强的信号。我们把这个差距通过指数分布函数进行映射到概率空间，差距越小，被认为是该信号所在商铺的概率越大；对于商铺，该商铺所能捕获的wifi以及强度与用户的wifi列表越接近，该用户越可能在该商铺。<br>
 
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" title="exp(-\lambda _{2}|shop\_inten_{j}-user\_inten_{j}|) \; j\in \left \{ w_{j}|w_{j}\in shop\_wifis\; and\; w_{j}\in user\_wifis \right \}" /></a><br>
-
+<img src="https://latex.codecogs.com/gif.latex?exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" title="exp(-\lambda _{2}|shop\_inten_{j}-user\_inten_{j}|) \; j\in \left \{ w_{j}|w_{j}\in shop\_wifis\; and\; w_{j}\in user\_wifis \right \}" /><br>
 可以理解为，先求出商铺的wifi集合与该用户wifi列表的交集，然后把wifi的强度差异同样通过指数分布映射，越接近，相似性越大。
 
 * 名称特征直方图。
@@ -119,7 +118,7 @@ Table 3、评测集
 1.	人无完人，初次构建的特征很可能有瑕疵，需要对分类错误的样本进行分析，进而重新考虑是不是特征有问题。例如，我对错误样本分析了一下，一个新用户面对两家商铺，与商铺A的交集有两个较强的wifi，与商铺B的交集有6个相对较弱的wifi。按理说应该是对应商铺A，可是我的特征里面只有累加，没有个数这个因子，然后计算出来商铺B的概率反而大了。
 2.	需要在编程的时候做的完善一点，尽量给出利于分析的结果数据。比如，有97个商场，我们计算出每个商场的分类准确率就可以对症下药了，哪个商场准确率低，我们就针对这个商场进行分析，分而治之
 3.	给出必要的统计图，比纯看数据来的灵感多一点
- ![不同店铺的消费（时间-人流量图](https://github.com/sun521521/TianChi/blob/master/TianChi/data/table4.png)
- 不同店铺的消费（时间-人流量图）
+ ![不同店铺的消费（时间-人流量图](https://github.com/sun521521/TianChi/blob/master/TianChi/data/table4.png)<br>
+ `不同店铺的消费（时间-人流量图）`
  
 4.	程序中，对于计算量比较大的部分，可以进行存储，使用的时候读取存储文件，没必要每次都计算
