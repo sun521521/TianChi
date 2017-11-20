@@ -79,12 +79,12 @@ Table 3、评测集
 这里，user_inten为用户所能搜到的wifi名字及强度，max_inten为用户搜到的最强的信号。我们把这个差距通过指数分布函数进行映射到概率空间，差距越小，被认为是该信号所在商铺的概率越大；对于商铺，该商铺所能捕获的wifi以及强度与用户的wifi列表越接近，该用户越可能在该商铺。<br>
 
 
-<img src="https://latex.codecogs.com/gif.latex?exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" title="exp(-\lambda _{2}|shop\_inten_{j}-user\_inten_{j}|) \; j\in \left \{ w_{j}|w_{j}\in shop\_wifis\; and\; w_{j}\in user\_wifis \right \}" /><br>
+<a href="https://www.codecogs.com/eqnedit.php?latex=exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" title="exp(-\lambda _{2}|shop\_inten_{j}-user\_inten_{j}|) \; j\in \left \{ w_{j}|w_{j}\in shop\_wifis\; and\; w_{j}\in user\_wifis \right \}" /></a><br>
 可以理解为，先求出商铺的wifi集合与该用户wifi列表的交集，然后把wifi的强度差异同样通过指数分布映射，越接近，相似性越大。
 
 * 名称特征直方图。
 -----
-想法是：该用户wifi名称列表与商铺的wifi重合度越大，越有可能属于该商铺。使用的公式是：
+想法是：该用户wifi名称列表与商铺的wifi重合度越大，越有可能属于该商铺。使用的公式是：<br>
 相似度=wifi交集数量/商铺wifi数量
 * 经纬度和时间特征
 -----
