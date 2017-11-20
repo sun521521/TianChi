@@ -31,15 +31,15 @@
 ------- 
 Table 1、店铺和商场信息表
 ######
-![](https://github.com/sun521521/TianChi/TianChi/Data/table1.png)
+![店铺和商场信息表](https://github.com/sun521521/TianChi/blob/master/TianChi/data/table1.png)
 
 Table 2、用户在店铺内交易表
 ######
-![](https://github.com/sun521521/TianChi/TianChi/Data/table2.png)
+![用户在店铺内交易表](https://github.com/sun521521/TianChi/blob/master/TianChi/data/table2.png)
 
 Table 3、评测集
 ######
-![](https://github.com/sun521521/TianChi/TianChi/Data/table3.png)
+![评测集](https://github.com/sun521521/TianChi/blob/master/TianChi/data/table3.png)
 
 我的分析
 ------- 
@@ -60,7 +60,7 @@ Table 3、评测集
 数据清洗
 ####
 1.	对于信号干扰。查阅资料，wifi强度一般在[-30,-120]，-30强于-120，并且wifi在小于-90的情况下难以连接。对用户的wifi强度进行统计后，我们认为低于-90的wifi随机性太大，可能是遥远的隔壁的信号，即使在同一个位置，可能有的手机能搜到有的搜不到。因此，我们把小于-90的干扰信号删掉，认为小于-90的信号不具备辨识度
- 
+![](https://github.com/sun521521/TianChi/blob/master/TianChi/data/wifi_distribution.png)
           不同强度的wifi数量分布
 2.	对于一个店铺多个相同wifi名称但强度不同的情况。我们删掉每个wifi列表中较弱的同名wifi。想法是，一方面，我们使用的字典存储，这样可以优化计算，否则需要对重名的wifi重新命名，这样的情况比较少，性价比不高；另一方面，其中任何一个wifi都可以表征该店铺，即该店铺对应于两种模式，也是不影响建模的。如果不重命名，也不删掉，那么会造成该店铺辐射范围缩小的假象
 
@@ -114,6 +114,7 @@ Table 3、评测集
 1.	人无完人，初次构建的特征很可能有瑕疵，需要对分类错误的样本进行分析，进而重新考虑是不是特征有问题。例如，我对错误样本分析了一下，一个新用户面对两家商铺，与商铺A的交集有两个较强的wifi，与商铺B的交集有6个相对较弱的wifi。按理说应该是对应商铺A，可是我的特征里面只有累加，没有个数这个因子，然后计算出来商铺B的概率反而大了。
 2.	需要在编程的时候做的完善一点，尽量给出利于分析的结果数据。比如，有97个商场，我们计算出每个商场的分类准确率就可以对症下药了，哪个商场准确率低，我们就针对这个商场进行分析，分而治之
 3.	给出必要的统计图，比纯看数据来的灵感多一点
+ ![不同店铺的消费（时间-人流量图](https://github.com/sun521521/TianChi/blob/master/TianChi/data/table4.png)
+ 不同店铺的消费（时间-人流量图）
  
-          不同店铺的消费（时间-人流量图）
 4.	程序中，对于计算量比较大的部分，可以进行存储，使用的时候读取存储文件，没必要每次都计算
