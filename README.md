@@ -1,6 +1,22 @@
 # -
 随着互联网移动支付的迅速普及，我们享受到越来越多的生活便利。如当您走入商场的某家餐厅时，手机会自动弹出该餐厅的优惠券；当您走入商场服装店时，手机可以自动推荐这家店里您喜欢的衣服。在正确的时间、正确的地点给用户最有效的服务，是各大互联网公司智能化拓展的新战场。
 
+使用说明
+-----
+把TianChi文件夹放在python根目录，即可运行使用<br>这个框架包含四部分：数据清洗，预处理，特征工程，训练分类
+
+手动依次运行：
+1. \TianChi\DataCleaning\DeteleNoises.py
+	对原始数据进行清洗，去掉重复wifi信号和干扰的弱信号
+2. \TianChi\DataCleaning\DeteleNoises2.py
+	对评测集进行同样操作
+3. \TianChi\preprocessing\WifiGrouping.py
+	生成每个商铺具有辨识度的wifi集合
+4. \TianChi\FeatureToClassification\FeatureToClassification.py
+	提取特征，并进行训练、分类，结果保存在result.csv
+
+
+
 阿里巴巴天池竞赛：商场中用户的精确定位
 ====  
 
