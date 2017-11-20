@@ -80,7 +80,7 @@ Table 3、评测集
 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?exp(-\lambda&space;_{2}|shop\_inten_{j}-user\_inten_{j}|)&space;\;&space;j\in&space;\left&space;\{&space;w_{j}|w_{j}\in&space;shop\_wifis\;&space;and\;&space;w_{j}\in&space;user\_wifis&space;\right&space;\}" title="exp(-\lambda _{2}|shop\_inten_{j}-user\_inten_{j}|) \; j\in \left \{ w_{j}|w_{j}\in shop\_wifis\; and\; w_{j}\in user\_wifis \right \}" /></a><br>
-可以理解为，先求出商铺的wifi集合与该用户wifi列表的交集，然后把wifi的强度差异同样通过指数分布映射，越接近，相似性越大。
+可以理解为，先求出商铺的wifi集合与该用户wifi列表的交集，然后把wifi的强度差异同样通过指数分布映射，越接近，相似性越大。<br>
 
 * 名称特征直方图。
 -----
